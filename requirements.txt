@@ -5,3 +5,13 @@ pyzbar @ git+https://github.com/seedsigner/pyzbar.git@c3c237821c6a20b17953efe59b
 qrcode==7.3.1
 six==1.16.0
 urtypes @ git+https://github.com/selfcustody/urtypes.git@7fb280eab3b3563dfc57d2733b0bf5cbc0a96a6a
+Adafruit-Blinka==8.28.1
+adafruit-circuitpython-busdevice==5.2.6
+adafruit-circuitpython-requests==2.0.3
+adafruit-circuitpython-rgb-display==3.12.3
+adafruit-circuitpython-typing==1.9.6
+Adafruit-GPIO==1.0.3
+Adafruit-ILI9341==1.5.1
+Adafruit-PlatformDetect==3.57.0
+Adafruit-PureIO==1.1.11
+adafruit-python-shell==1.8.0
