@@ -7,15 +7,15 @@ from seedsigner.models.singleton import Singleton
 class HardwareButtons(Singleton):
     if GPIO.RPI_INFO['P1_REVISION'] == 3: #This indicates that we have revision 3 GPIO
         print("Detected 40pin GPIO (Rasbperry Pi 2 and above)")
-        KEY_UP_PIN = 31
-        KEY_DOWN_PIN = 35
-        KEY_LEFT_PIN = 29
-        KEY_RIGHT_PIN = 37
-        KEY_PRESS_PIN = 33
+        KEY_UP_PIN = 19
+        KEY_DOWN_PIN = 26
+        KEY_LEFT_PIN = 5
+        KEY_RIGHT_PIN = 6
+        KEY_PRESS_PIN = 23
 
-        KEY1_PIN = 40
-        KEY2_PIN = 38
-        KEY3_PIN = 36
+        KEY1_PIN = 27
+        KEY2_PIN = 22
+        KEY3_PIN = 17
 
     else:
         print("Assuming 26 Pin GPIO (Raspberry P1 1)")
@@ -36,7 +36,7 @@ class HardwareButtons(Singleton):
             cls._instance = cls.__new__(cls)
 
             #init GPIO
-            GPIO.setmode(GPIO.BOARD)
+            GPIO.setmode(GPIO.BCM)
             GPIO.setup(HardwareButtons.KEY_UP_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)    # Input with pull-up
             GPIO.setup(HardwareButtons.KEY_DOWN_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)  # Input with pull-up
             GPIO.setup(HardwareButtons.KEY_LEFT_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)  # Input with pull-up
@@ -179,15 +179,15 @@ class HardwareButtons(Singleton):
 #   patterns to have a static constants class plus a settable global value.
 class HardwareButtonsConstants:
     if GPIO.RPI_INFO['P1_REVISION'] == 3: #This indicates that we have revision 3 GPIO
-        KEY_UP = 31
-        KEY_DOWN = 35
-        KEY_LEFT = 29
-        KEY_RIGHT = 37
-        KEY_PRESS = 33
+        KEY_UP = 19
+        KEY_DOWN = 26
+        KEY_LEFT = 5
+        KEY_RIGHT = 6
+        KEY_PRESS = 23
 
-        KEY1 = 40
-        KEY2 = 38
-        KEY3 = 36
+        KEY1 = 27
+        KEY2 = 22
+        KEY3 = 17
     else:
         KEY_UP = 5
         KEY_DOWN = 11

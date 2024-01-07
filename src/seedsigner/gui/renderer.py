@@ -2,10 +2,22 @@ from PIL import Image, ImageDraw
 from threading import Lock
 
 from seedsigner.gui.components import Fonts, GUIConstants
-from seedsigner.hardware.ST7789 import ST7789
+import digitalio
+import board
+from adafruit_rgb_display import ili9341
+#from seedsigner.hardware.ST7789 import ST7789
+
 from seedsigner.models.singleton import ConfigurableSingleton
 
+# Configuration for CS and DC pins (these are PiTFT defaults):
+cs_pin = digitalio.DigitalInOut(board.CE0)
+dc_pin = digitalio.DigitalInOut(board.D25)
+reset_pin = digitalio.DigitalInOut(board.D24)
+# Config for display baudrate (default max is 24mhz):
+BAUDRATE = 24000000
 
+# Setup SPI bus using hardware SPI:
+spi = board.SPI()
 
 class Renderer(ConfigurableSingleton):
     buttons = None
@@ -24,9 +36,26 @@ class Renderer(ConfigurableSingleton):
         cls._instance = renderer
 
         # Eventually we'll be able to plug in other display controllers
-        renderer.disp = ST7789()
-        renderer.canvas_width = renderer.disp.width
-        renderer.canvas_height = renderer.disp.height
+        #renderer.disp = ST7789()
+        renderer.disp = ili9341.ILI9341(
+            spi,
+            rotation=270,  # 2.2", 2.4", 2.8", 3.2" ILI9341
+            cs=cs_pin,
+            dc=dc_pin,
+            rst=reset_pin,
+            baudrate=BAUDRATE,
+        )
+        # Create blank image for drawing.
+        # Make sure to create image with mode 'RGB' for full color.
+        if renderer.disp.rotation % 180 == 90:
+            height = renderer.disp.width  # we swap height/width to rotate it to landscape!
+            width = renderer.disp.height
+        else:
+            width = renderer.disp.width  # we swap height/width to rotate it to landscape!
+            height = renderer.disp.height
+
+        renderer.canvas_width = width
+        renderer.canvas_height = height
 
         renderer.canvas = Image.new('RGB', (renderer.canvas_width, renderer.canvas_height))
         renderer.draw = ImageDraw.Draw(renderer.canvas)
@@ -35,7 +64,7 @@ class Renderer(ConfigurableSingleton):
     def show_image(self, image=None, alpha_overlay=None, show_direct=False):
         if show_direct:
             # Use the incoming image as the canvas and immediately render
-            self.disp.ShowImage(image, 0, 0)
+            self.disp.image(image)
             return
 
         if alpha_overlay:
@@ -47,7 +76,7 @@ class Renderer(ConfigurableSingleton):
             # Always write to the current canvas, rather than trying to replace it
             self.canvas.paste(image)
 
-        self.disp.ShowImage(self.canvas, 0, 0)
+        self.disp.image(self.canvas)
 
 
     def show_image_pan(self, image, start_x, start_y, end_x, end_y, rate, alpha_overlay=None):
@@ -81,7 +110,7 @@ class Renderer(ConfigurableSingleton):
             # Always keep a copy of the current display in the canvas
             self.canvas.paste(crop)
 
-            self.disp.ShowImage(crop, 0, 0)
+            self.disp.image(crop)
 
 
 

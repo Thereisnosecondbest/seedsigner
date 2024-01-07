@@ -9,12 +9,12 @@ class ST7789(object):
     """class for ST7789  240*240 1.3inch OLED displays."""
 
     def __init__(self):
-        self.width = 240
+        self.width = 320
         self.height = 240
 
         #Initialize DC RST pin
-        self._dc = 22
-        self._rst = 13
+        self._dc = 18
+        self._rst = 23
         self._bl = 18
 
         GPIO.setmode(GPIO.BOARD)
@@ -25,7 +25,7 @@ class ST7789(object):
         GPIO.output(self._bl, GPIO.HIGH)
 
         #Initialize SPI
-        self._spi = spidev.SpiDev(0, 0)
+        self._spi = spidev.SpiDev(0, 1)
         self._spi.max_speed_hz = 40000000
 
         self.init()

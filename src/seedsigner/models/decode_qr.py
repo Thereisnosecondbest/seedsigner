@@ -308,7 +308,7 @@ class DecodeQR:
     def extract_qr_data(image, is_binary:bool = False) -> str:
         if image is None:
             return None
-
+        
         barcodes = pyzbar.decode(image, symbols=[ZBarSymbol.QRCODE], binary=is_binary)
 
         # if barcodes:

@@ -523,7 +523,7 @@ class LargeButtonScreen(BaseTopNavScreen):
 
         # Maximize 2-across width; calc height with a 4:3 aspect ratio
         button_width = int((self.canvas_width - (2 * GUIConstants.EDGE_PADDING) - GUIConstants.COMPONENT_PADDING) / 2)
-        button_height = int(button_width * (3.0 / 4.0))
+        button_height = int(button_width * (2.4 / 4.0))
 
         # Vertically center the buttons
         if len(self.button_data) == 2:
